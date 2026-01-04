@@ -3,10 +3,19 @@ spring:
     name: ${APP_NAME:FINO}
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:prod}
-    include: db, jwt
+    # include: db, jwt
   devtools:
     restart:
       enabled: ${DEVTOOLS_RESTART_ENABLED:false}
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/fino_db}
+    username: ${SPRING_DATASOURCE_USERNAME:fino_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO:update}
+    show-sql: ${JPA_SHOW_SQL:false}
 
 server:
   port: ${SERVER_PORT:8080}
@@ -28,3 +37,6 @@ springdoc:
 location:
   auth:
     allowed-distance-meters: ${LOCATION_AUTH_ALLOWED_DISTANCE:150.0}
+
+jwt:
+  secret: ${JWT_SECRET:defaultSecretKeyForTestingPurposesOnly}
