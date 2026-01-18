@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3308/fino_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=TRUE&useSSL=FALSE
+    username: fino_user
+    password: ma29562956!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  jwt:
+    secret: localDevSecretKeyForTestingjhgftdredfghjkgyftdrsedrftghjkugytrdfghjkhg
