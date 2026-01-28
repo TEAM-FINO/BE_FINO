@@ -8,6 +8,8 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  APP_NAME: be-fino
+  VALUES_PATH: helm/apps/be-fino/values.yaml
 
 jobs:
   build:
@@ -45,3 +47,18 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Update Infrastructure Repository
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          INFRA_REPO_TOKEN: ${{ secrets.INFRA_REPO_TOKEN }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          git clone https://x-access-token:${INFRA_REPO_TOKEN}@github.com/team-fino/FINO-infrastructure.git infra
+          cd infra
+          sed -i "s/tag: .*/tag: ${IMAGE_TAG}/" ${{ env.VALUES_PATH }}
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add ${{ env.VALUES_PATH }}
+          git commit -m "chore: update ${{ env.APP_NAME }} image to ${IMAGE_TAG}" || echo "No changes"
+          git push
